@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from constants import SbCodes
 
 from helpers import Helpers 
 
@@ -211,6 +212,15 @@ class ComponentCreator :
             EC.element_to_be_clickable((By.XPATH, '//*[@id="distributionpoint_location"]/div/div/address-location/div/span/button'))
         )
         address_button = self.driver.find_element(by=By.XPATH, value='//*[@id="distributionpoint_location"]/div/div/address-location/div/span/button').click()
+
+        #select type
+        type_select = Select(self.driver.find_element(by=By.CSS_SELECTOR, value='apx-field1[label="Tipos"] select'))
+        if sb_template == SbCodes.JOINT_CHAMBER_SB_MOS: 
+            type_select.select_by_index(1)
+        elif sb_template == SbCodes.JOINT_CHAMBER_SB_SAT: 
+            type_select.select_by_index(2)
+        elif sb_template == SbCodes.JOINT_CHAMBER_SB_12_CLIENTS: 
+            type_select.select_by_index(3)
 
         #select chamber
         helper.select_chamber_or_parent(self.driver)
