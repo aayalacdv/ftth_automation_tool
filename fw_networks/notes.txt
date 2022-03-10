@@ -1,4 +1,7 @@
 PARA PODER EMPEZAR EL SCRIPT ES NECESARIO CORRER CHROME EN DEBUG MODE
 
-chrome_dir = "C:\Program Files\Google\Chrome\Application\"
-flags : --remote-debugging-port=9222 --no-first-run --no-default-browser-check 
+//cd to chrome's directory
+cd "C:\Program Files\Google\Chrome\Application\"
+
+//execture command
+./chrome.exe --remote-debugging-port=9222 --no-first-run --no-default-browser-check 

@@ -39,11 +39,14 @@ class ComponentCreator :
          select_template = Select(self.driver.find_element_by_xpath('//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[3]/div/div/select'))
          select_template.select_by_value(joint_box_code)
 
+        #TODO select the correct description 
+         description_box = self.driver.find_element(by=By.XPATH, value='//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[2]/div/div/input').send_keys(joint_box_code)
+
          #select the correct layer
          layer_wait = WebDriverWait(self.driver,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/button' )))
          layer = self.driver.find_element_by_xpath('//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/button').click()
          overlay_panel_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'ui-overlaypanel')))
-         upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[6]/li/div/span/span')))
+         upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[3]/li/div/span[2]/span')))
          helper.scrape_layers(self.driver,self.WORKING_TOWN,self.WORKING_CLUSTER)
 
          save_button = self.driver.find_element_by_xpath('//*[@id="frmsplicebox"]/form/footer/button[1]').click()
@@ -93,11 +96,14 @@ class ComponentCreator :
         select_template = Select(self.driver.find_element_by_xpath('//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/select'))
         select_template.select_by_value(pole_sb_template)
 
+        #input the appropiate description
+        description = self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[2]/div/div/input').send_keys(pole_sb_template)
+
         #select the correct layer
         layer_wait = WebDriverWait(self.driver, 100).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/button')))
         layer = self.driver.find_element_by_xpath('//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/button').click() 
         overlay_panel_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'ui-overlaypanel')))
-        upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[6]/li/div/span/span')))
+        upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[2]/li/div/span[1]')))
         helper.scrape_layers(self.driver,self.WORKING_TOWN, self.WORKING_CLUSTER)
 
         save_button = self.driver.find_element_by_xpath('//*[@id="frmdistributionpoint"]/form/footer/button[1]').click()
@@ -169,12 +175,17 @@ class ComponentCreator :
         select_template = Select(self.driver.find_element_by_xpath('//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/select'))
         select_template.select_by_value(sb_template)
 
+        #input the appropiate description
+        description = self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[2]/div/div/input').send_keys(sb_template)
+
+
         #select the correct layer
         layer_wait = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/button')))
         layer = self.driver.find_element_by_xpath('//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/button').click() 
         overlay_panel_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'ui-overlaypanel')))
-        upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[6]/li/div/span/span')))
+        upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[2]/li/div/span[1]')))
         helper.scrape_layers(self.driver,self.WORKING_TOWN, self.WORKING_CLUSTER)
+
 
         save_button = self.driver.find_element_by_xpath('//*[@id="frmdistributionpoint"]/form/footer/button[1]').click()
 
@@ -235,4 +246,6 @@ class ComponentCreator :
 
 
 
-   
+#     #input the appropiate description
+#  description = self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[2]/div/div/input').send_keys(pole_sb_template)
+#  upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[2]/li/div/span[1]')))

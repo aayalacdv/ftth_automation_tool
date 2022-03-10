@@ -25,4 +25,6 @@ class JointBoxCodes :
 
     JOINT_BOX_SMALL = 'JOINT BOX SMALL'
     JOINT_BOX_MEDIAN = 'JOINT BOX MEDIAN'
+    JOINT_BOX_SAM = 'Joint Box Sam'
     JOINT_BOX_BIG = 'JOINT BOX BIG'
+    

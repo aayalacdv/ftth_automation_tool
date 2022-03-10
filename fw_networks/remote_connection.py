@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.options import Options
 
 class RemoteConnection: 
     
-    def setup_connection() : 
+    def setup_connection():
         #setup options
         chrome_options = Options()
         chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")

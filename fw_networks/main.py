@@ -7,8 +7,8 @@ from helpers import Helpers
 
 if __name__ == '__main__': 
 
-    WORKING_TOWN = Towns.SKELMERSDALE
-    WORKING_CLUSTER = 1 
+    WORKING_TOWN = Towns.CRAWLEY
+    WORKING_CLUSTER = 40 
 
     driver = RemoteConnection.setup_connection()
     creator = ComponentCreator(driver=driver, working_town=WORKING_TOWN, working_cluster=WORKING_CLUSTER)
@@ -25,9 +25,11 @@ if __name__ == '__main__':
             creator.create_joint_box(JointBoxCodes.JOINT_BOX_SMALL)
         elif( command == 'ª'): 
             creator.create_joint_box(JointBoxCodes.JOINT_BOX_MEDIAN)
+        elif( command == 'ºº'): 
+            creator.create_joint_box(JointBoxCodes.JOINT_BOX_SAM)
         elif( command == 'q'): 
             creator.create_joint_chamber_sb(SbCodes.JOINT_CHAMBER_SB_12_CLIENTS)
-        elif(command == 'w'):
+        elif command == 'w':
             creator.create_joint_chamber_sb(SbCodes.JOINT_CHAMBER_SB_MOS)
         elif(command == 'e'):
             creator.create_joint_chamber_sb(SbCodes.JOINT_CHAMBER_SB_SAT)
