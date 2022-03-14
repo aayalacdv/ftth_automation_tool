@@ -1,4 +1,5 @@
 from pydoc import Helper
+from cable_manager import CableManager
 from constants import JointBoxCodes, SbCodes, Towns 
 from component_creator import ComponentCreator
 from remote_connection import RemoteConnection
@@ -7,8 +8,8 @@ from helpers import Helpers
 
 if __name__ == '__main__': 
 
-    WORKING_TOWN = Towns.SKELMERSDALE
-    WORKING_CLUSTER = 1 
+    WORKING_TOWN = Towns.CARLTON
+    WORKING_CLUSTER = 11
 
     driver = RemoteConnection.setup_connection()
     creator = ComponentCreator(driver=driver, working_town=WORKING_TOWN, working_cluster=WORKING_CLUSTER)
@@ -38,5 +39,10 @@ if __name__ == '__main__':
         elif(command == '3'):
             creator.create_pole_sb(SbCodes.POLE_SB_24_CLIENTS_SAT)
         elif(command == '0'): 
-            Helpers.scrape_uprns_from_map(driver)
-            
+            cable_manager = CableManager(driver=driver, working_cluster=WORKING_CLUSTER, working_town_code='CHT', working_town=WORKING_TOWN) 
+            id = cable_manager.get_cable_id('J13081','SB39786')
+            print(id)
+
+            cable_manager.automate_cable_form(cable_template='12 f.o.')
+
+

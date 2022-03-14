@@ -256,6 +256,3 @@ class ComponentCreator :
 
 
 
-#     #input the appropiate description
-#  description = self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[2]/div/div/input').send_keys(pole_sb_template)
-#  upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[2]/li/div/span[1]')))

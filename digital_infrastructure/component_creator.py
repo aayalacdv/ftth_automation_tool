@@ -51,6 +51,7 @@ class ComponentCreator :
          #status
          status_wait = WebDriverWait(self.driver, 100).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select')))
          status = Select(self.driver.find_element(by=By.XPATH, value='//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
+         designed_option = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='01']")))
          status.select_by_value('01')
 
          #details and address
@@ -107,6 +108,7 @@ class ComponentCreator :
            EC.element_to_be_clickable((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
         )
         status = Select(self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
+        designed_option = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='01']")))
         status.select_by_value('01')
 
         #details and address 
@@ -183,6 +185,7 @@ class ComponentCreator :
            EC.element_to_be_clickable((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
         )
         status = Select(self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
+        designed_option = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='01']")))
         status.select_by_value('01')
 
         #details and address 
