@@ -1,4 +1,6 @@
+from operator import not_
 from pydoc import Helper
+from cv2 import exp
 import pyautogui
 import time
 from selenium import webdriver
@@ -7,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from constants import CableCodes
 
 from helpers import Helpers
 
@@ -42,16 +45,9 @@ class CableManager:
         create_cable_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "a[href='#newCable']")))
         crate_cable = self.driver.find_element(by=By.CSS_SELECTOR, value="a[href='#newCable']").click()
 
-        #create cable
-        creating_cable = True
-        while creating_cable: 
 
-            form = input('seguir completando el formulario? ')
 
-            if form.strip() == 'y':
-                creating_cable = False
-
-        form_wait = WebDriverWait(self.driver, 30).until(EC.visibility_of_element_located((By.XPATH, ORIGIN_ID_XPATH )))
+        form_wait = WebDriverWait(self.driver, 600).until(EC.visibility_of_element_located((By.XPATH, ORIGIN_ID_XPATH )))
 
         select_origin = Select(self.driver.find_element(by=By.XPATH, value=ORIGIN_ID_XPATH))
         select_dest = Select(self.driver.find_element(by=By.XPATH, value = DEST_ID_XPATH))
@@ -89,10 +85,40 @@ class CableManager:
         layer_wait = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="frmcable"]/form/article/div[2]/apx-field1[5]/div/div/app-find-layer/button')))
         layer = self.driver.find_element_by_xpath('//*[@id="frmcable"]/form/article/div[2]/apx-field1[5]/div/div/app-find-layer/button').click() 
         overlay_panel_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'ui-overlaypanel')))
-        upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmcable"]/form/article/div[2]/apx-field1[5]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[4]/li/div/div/div/span')))
+        #upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmcable"]/form/article/div[2]/apx-field1[5]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[4]/li/div/div/div/span')))
         helper.scrape_layers(self.driver,self.workign_town, self.working_cluster)
 
-        save_button = self.driver.find_element_by_xpath('//*[@id="frmdistributionpoint"]/form/footer/button[1]').click()
+        save_button = self.driver.find_element_by_xpath('//*[@id="frmcable"]/form/footer/button[1]').click()
+
+        #cable details
+        not_clickable = True
+        while not_clickable: 
+            try: 
+                details_wait = WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"p-accordiontab[header='Cable Details'] span")))
+                details = self.driver.find_element(by=By.CSS_SELECTOR, value="p-accordiontab[header='Cable Details'] span").click()
+                not_clickable = False
+            except: 
+                pass
+
+        
+        size_wait = WebDriverWait(self.driver, 30).until(EC.visibility_of_element_located((By.CSS_SELECTOR,"apx-field1[label='Size'] input")))
+        size = self.driver.find_element(by= By.CSS_SELECTOR, value= "apx-field1[label='Size'] input")
+
+        cable_size = size.get_attribute('value')
+        print(cable_size)
+        tubes = int(int(cable_size)/ 10)
+        print(tubes)
+
+        tubes_input = self.driver.find_element(by=By.CSS_SELECTOR, value="apx-field1[label='Tubes'] input")
+        tubes_input.send_keys(tubes) 
+        
+        if cable_template == CableCodes.CABLE_48_FO_ULW or cable_template == CableCodes.CABLE_12_FO_ULW: 
+            comments = self.driver.find_element(by=By.CSS_SELECTOR, value="apx-field1[label='Comentarios'] textarea")
+            comments.send_keys('AERIAL')
+
+        save_button = self.driver.find_element_by_xpath('//*[@id="frmcable"]/form/footer/button[1]').click()
+
+        
 
 
     

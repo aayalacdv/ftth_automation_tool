@@ -26,3 +26,12 @@ class JointBoxCodes :
     JOINT_BOX_SMALL = 'JOINT BOX SMALL'
     JOINT_BOX_MEDIAN = 'JOINT BOX MEDIAN'
     JOINT_BOX_BIG = 'JOINT BOX BIG'
+
+
+class CableCodes: 
+
+    CABLE_12_FO = '12 f.o.'
+    CABLE_12_FO_ULW = '12 f.o. ULW'
+    
+    CABLE_48_FO = '48 f.o.'
+    CABLE_48_FO_ULW = '48 f.o. ULW'

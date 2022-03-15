@@ -1,6 +1,6 @@
 from pydoc import Helper
 from cable_manager import CableManager
-from constants import JointBoxCodes, SbCodes, Towns 
+from constants import CableCodes, JointBoxCodes, SbCodes, Towns 
 from component_creator import ComponentCreator
 from remote_connection import RemoteConnection
 from helpers import Helpers 
@@ -13,6 +13,7 @@ if __name__ == '__main__':
 
     driver = RemoteConnection.setup_connection()
     creator = ComponentCreator(driver=driver, working_town=WORKING_TOWN, working_cluster=WORKING_CLUSTER)
+    cable_manager = CableManager(driver=driver, working_cluster=WORKING_CLUSTER, working_town_code='CHT', working_town=WORKING_TOWN) 
 
     keep_open = True
     
@@ -38,11 +39,15 @@ if __name__ == '__main__':
             creator.create_pole_sb(SbCodes.POLE_SB_24_CLIENTS_MOS)
         elif(command == '3'):
             creator.create_pole_sb(SbCodes.POLE_SB_24_CLIENTS_SAT)
+        elif command == 'a': 
+            cable_manager.automate_cable_form(cable_template=CableCodes.CABLE_12_FO)
+        elif command == 's': 
+            cable_manager.automate_cable_form(cable_template=CableCodes.CABLE_48_FO)
+        elif command == 'd': 
+            cable_manager.automate_cable_form(cable_template=CableCodes.CABLE_12_FO_ULW)
+        elif command == 'f': 
+            cable_manager.automate_cable_form(cable_template=CableCodes.CABLE_48_FO_ULW)
         elif(command == '0'): 
-            cable_manager = CableManager(driver=driver, working_cluster=WORKING_CLUSTER, working_town_code='CHT', working_town=WORKING_TOWN) 
-            id = cable_manager.get_cable_id('J13081','SB39786')
-            print(id)
-
-            cable_manager.automate_cable_form(cable_template='12 f.o.')
+            pass
 
 
