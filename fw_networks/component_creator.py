@@ -167,7 +167,7 @@ class ComponentCreator :
         create_cto_wait = WebDriverWait(self.driver,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="menuOperacio"]/ul/li[7]/a'))  )
         create_cto = self.driver.find_element_by_xpath('//*[@id="menuOperacio"]/ul/li[7]/a').click()
 
-        #place the sb on the right position
+        #place the sb on the right position 
         time.sleep(0.5)
         pyautogui.doubleClick(mouse_position)
 
