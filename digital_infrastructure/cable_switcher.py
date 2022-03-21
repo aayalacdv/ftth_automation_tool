@@ -20,7 +20,6 @@ if __name__ == '__main__':
     WORKING_TOWN = Towns.CARLTON
     WORKING_CLUSTER = 8
 
-    
     ORIGIN_ID_XPATH = '//*[@id="frmcable"]/form/article/div[2]/app-location/apx-field1[2]/div/div/div[1]/app-find-closest-element/select'
     DEST_ID_XPATH = '//*[@id="frmcable"]/form/article/div[2]/app-location/apx-field1[2]/div/div/div[2]/app-find-closest-element/select'
 
@@ -63,10 +62,7 @@ if __name__ == '__main__':
         id_container.clear()
         id_container.send_keys(id)
 
-        
-
-
-     
+            
 
         save_btn = driver.find_element(by=By.XPATH, value='//*[@id="frmcable"]/form/footer/button[1]').click()
 
