@@ -9,7 +9,7 @@ from helpers import Helpers
 if __name__ == '__main__': 
 
     WORKING_TOWN = Towns.CARLTON
-    WORKING_CLUSTER = 11
+    WORKING_CLUSTER = 5
 
     driver = RemoteConnection.setup_connection()
     creator = ComponentCreator(driver=driver, working_town=WORKING_TOWN, working_cluster=WORKING_CLUSTER)

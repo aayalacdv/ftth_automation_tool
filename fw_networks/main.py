@@ -8,12 +8,12 @@ from helpers import Helpers
 
 if __name__ == '__main__': 
 
-    WORKING_TOWN = Towns.CRAWLEY
-    WORKING_CLUSTER = 40 
+    WORKING_TOWN = Towns.CARTERTON
+    WORKING_CLUSTER = 6
 
     driver = RemoteConnection.setup_connection()
     creator = ComponentCreator(driver=driver, working_town=WORKING_TOWN, working_cluster=WORKING_CLUSTER)
-    cable_manager = CableManager(driver=driver, working_cluster=WORKING_CLUSTER, working_town_code='CRA', working_town=WORKING_TOWN) 
+    cable_manager = CableManager(driver=driver, working_cluster=WORKING_CLUSTER, working_town_code='CTT', working_town=WORKING_TOWN) 
 
     keep_open = True
     
