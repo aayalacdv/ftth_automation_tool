@@ -95,10 +95,9 @@ class ComponentCreator :
         #select the correct template
         select_template_wait = WebDriverWait(self.driver, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/select')))
         select_template = Select(self.driver.find_element_by_xpath('//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/select'))
-        select_template.select_by_value(pole_sb_template)
+        select_template.select_by_value('POLE SB 24 CLIENTS')
 
-        #input the appropiate description
-        description = self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[2]/div/div/input').send_keys(pole_sb_template)
+        
 
         #select the correct layer
         layer_wait = WebDriverWait(self.driver, 100).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/button')))
@@ -115,6 +114,10 @@ class ComponentCreator :
         )
         status = Select(self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
         status.select_by_value('01')
+
+        #input the appropiate description
+        description = self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[2]/div/div/input').clear()
+        description = self.driver.find_element(by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[2]/div/div/input').send_keys(pole_sb_template)
 
         #details and address 
         details_clickable = False
@@ -134,6 +137,13 @@ class ComponentCreator :
 
         #select chamber
         helper.select_chamber_or_parent(self.driver)
+
+        #select pole type
+        type_wait = WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "option[value='SB POLE']")))
+        type_select = Select(self.driver.find_element(by=By.CSS_SELECTOR, value="apx-field1[label='Tipos'] select"))
+        if( pole_sb_template == SbCodes.POLE_SB_24_CLIENTS):
+            pole_sb_template = 'SB POLE'
+        type_select.select_by_value(pole_sb_template)
 
          #select clients 
         clients_wait = WebDriverWait(self.driver, 10).until( EC.element_to_be_clickable((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/p-accordion/div/p-accordiontab[2]')))
