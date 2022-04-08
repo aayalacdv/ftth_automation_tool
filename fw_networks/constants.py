@@ -9,6 +9,7 @@ class Towns:
     CARLTON = 'CARLTON-HARWORTH-TICKHILL'
     CRAWLEY = 'CRAWLEY'
     CARTERTON = 'CARTERTON'
+    DORKING = "DORKING"
 
 
 class SbCodes: 
