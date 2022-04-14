@@ -9,6 +9,7 @@ from handle_input import handle_uprn_response
 
 
 from helpers import Helpers
+from remote_connection import RemoteConnection
 
 helper = Helpers()
 
@@ -31,6 +32,7 @@ class ComponentCreator:
 
             # place component on the right position
             WebDriverWait(self.driver, 100).until(EC.presence_of_element_located((By.ID, 'frmConfirmAction')))
+            time.sleep(0.5)
             pyautogui.doubleClick(mouse_position)
 
             # select the correct template
@@ -92,6 +94,7 @@ class ComponentCreator:
             save_button = self.driver.find_element_by_xpath(
                 '//*[@id="frmsplicebox"]/form/footer/button[1]').click()
         except:
+            self.driver = RemoteConnection.setup_connection()
             print("Something went wrogn creating joint box, restart :(")
 
     def create_pole_sb(self, pole_sb_template):
@@ -105,6 +108,7 @@ class ComponentCreator:
 
             # place the sb on the right position
             WebDriverWait(self.driver, 100).until(EC.presence_of_element_located((By.ID, 'frmConfirmAction')))
+            time.sleep(0.5)
             pyautogui.doubleClick(mouse_position)
 
             # select the correct template
@@ -190,6 +194,7 @@ class ComponentCreator:
                     uprn_selection = False
 
         except: 
+            self.driver = RemoteConnection.setup_connection()
             print('Something went wrong creating pole sb :(')
 
     def create_joint_chamber_sb(self, sb_template):
@@ -201,6 +206,7 @@ class ComponentCreator:
 
             # place the sb on the right position
             WebDriverWait(self.driver, 100).until(EC.presence_of_element_located((By.ID, 'frmConfirmAction')))
+            time.sleep(0.5)
             pyautogui.doubleClick(mouse_position)
 
             # select the correct template
@@ -280,14 +286,16 @@ class ComponentCreator:
             # uprn selection loop
             uprn_selection = True
             while uprn_selection:
-
-                select_clients = input('Seleccionar clientes?')
-                if select_clients == 'y':
+                
+                select_clients = handle_uprn_response()
+                if select_clients: 
                     uprn_list = helper.scrape_uprns_from_map(self.driver)
                     helper.scrape_uprn_from_cto_list(
                         self.driver, uprn_list=uprn_list)
 
-                elif select_clients == 'n':
+                else:
                     uprn_selection = False
+
         except: 
+            self.driver = RemoteConnection.setup_connection()
             print('Something went wrong creating joint box sb')
