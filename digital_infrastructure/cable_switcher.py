@@ -19,8 +19,8 @@ from selenium.webdriver.common.by import By
 
 if __name__ == '__main__':
 
-    WORKING_TOWN = Towns.CARLTON
-    WORKING_CLUSTER = 8
+    WORKING_TOWN = Towns.BAMFORD
+    WORKING_CLUSTER = 10
 
     ORIGIN_ID_XPATH = '//*[@id="frmcable"]/form/article/div[2]/app-location/apx-field1[2]/div/div/div[1]/app-find-closest-element/select'
     DEST_ID_XPATH = '//*[@id="frmcable"]/form/article/div[2]/app-location/apx-field1[2]/div/div/div[2]/app-find-closest-element/select'
@@ -28,44 +28,14 @@ if __name__ == '__main__':
     driver = RemoteConnection.setup_connection()
 
     cable_list = [
-        'CHT-CL005-J13452-SB40631',
-        'CHT-CL005-J13455-SB40637',
-        'CHT-CL005-J13455-SB40639',
-        'CHT-CL005-J13456-SB40645',
-        'CHT-CL005-J13457-SB40647',
-        'CHT-CL005-J13457-SB40648',
-        'CHT-CL005-J13457-SB40650',
-        'CHT-CL005-J13462-SB40649',
-        'CHT-CL005-J13464-SB40660',
-        'CHT-CL005-J13464-SB40703',
-        'CHT-CL005-J13473-SB40699',
-        'CHT-CL005-SB40621-SB40624',
-        'CHT-CL005-SB40627-SB40628',
-        'CHT-CL005-SB40628-SB40629',
-        'CHT-CL005-SB40632-SB40633',
-        'CHT-CL005-SB40637-SB40638',
-        'CHT-CL005-SB40645-SB40643',
-        'CHT-CL005-SB40650-SB40651',
-        'CHT-CL005-SB40660-SB40661',
-        'CHT-CL005-SB40670-SB40671',
-        'CHT-CL005-SB40672-SB40666',
-        'CHT-CL005-SB40674-SB40675',
-        'CHT-CL005-SB40676-SB40677',
-        'CHT-CL005-SB40678-SB40679',
-        'CHT-CL005-SB40680-SB40678',
-        'CHT-CL005-SB40687-SB40686',
-        'CHT-CL005-SB40687-SB40688',
-        'CHT-CL005-SB40689-SB40690',
-        'CHT-CL005-SB40689-SB40691',
-        'CHT-CL005-SB40701-SB40702',
-        'CHT-CL005-SB40701-SB40704',
-        'CHT-CL005-SB40711-SB40676',
-        'CHT-CL005-SB40712-SB40674',
-        'CHT-CL005-SB40715-SB40714']
+'BAM-CL008-SJ14235-J14132',
+'BAM-CL008-SJ14235-J14135',
+'BAM-CL008-SJ14235-SB42190'
+        ]
 
     def get_cable_id(origin, destination):
 
-        return f'CHT-CL006-{origin}-{destination}'
+        return f'BAM-CL010-{origin}-{destination}'
 
     def change_cable_label():
 
@@ -101,8 +71,12 @@ if __name__ == '__main__':
             by=By.XPATH, value='//*[@id="frmcable"]/form/article/div[2]/apx-field1[1]/div/div/input')
         id = get_cable_id(origin=origin, destination=destination)
         id_container.clear()
+        #TODO fix this shit 
+        time.sleep(1)
         id_container.send_keys(id)
 
+        WebDriverWait(driver, 100).until(EC.visibility_of_element_located((By.XPATH,'//*[@id="frmcable"]/form/footer/button[1]')))
+        WebDriverWait(driver, 100).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="frmcable"]/form/footer/button[1]')))
         save_btn = driver.find_element(
             by=By.XPATH, value='//*[@id="frmcable"]/form/footer/button[1]').click()
         WebDriverWait(driver, 600).until_not(EC.visibility_of_element_located(

@@ -82,10 +82,10 @@ class Helpers:
                     for content in node_content: 
                         span_label = content.find_element(by=By.CLASS_NAME, value='ui-treenode-label')
                         label = span_label.find_element(by=By.TAG_NAME, value='span')
-                        cluster = label.text.split()
+                        cluster = label.text.split('-')
 
                         try: 
-                            if(int(cluster[1]) == working_cluster): 
+                            if(int(cluster[1].split()[1]) == 1 & cluster[1].split()[0] == 'EXT' ): 
                                 cluster_checkbox = content.find_element(by=By.CLASS_NAME, value='ui-chkbox-box').click() 
                                 return 
                         except:

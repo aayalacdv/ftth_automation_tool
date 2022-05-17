@@ -23,7 +23,6 @@ class ComponentCreator:
         self.WORKING_TOWN = working_town
 
     def create_joint_box(self, joint_box_code):
-        try:
             print(f"Creating {joint_box_code}")
             # get the position for the joint box
             mouse_position = pyautogui.position()
@@ -53,18 +52,12 @@ class ComponentCreator:
                 (By.XPATH, '//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[6]/li/div/span/span')))
             helper.scrape_layers(
                 self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER)
+            
 
-            save_button = self.driver.find_element_by_xpath(
-                '//*[@id="frmsplicebox"]/form/footer/button[1]').click()
 
-            # status
-            status_wait = WebDriverWait(self.driver, 100).until(EC.element_to_be_clickable(
-                (By.XPATH, '//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select')))
-            status = Select(self.driver.find_element(
-                by=By.XPATH, value='//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
-            designed_option = WebDriverWait(self.driver, 20).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='01']")))
-            status.select_by_value('01')
+            btn = WebDriverWait(self.driver, 100).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'footer button.btn-success')))
+            save_button = self.driver.find_element(by=By.CSS_SELECTOR, value='footer button.btn-success').click()
+
 
             #details and address
             accordion_clickable = False
@@ -78,6 +71,16 @@ class ComponentCreator:
                 except:
                     accordion_clickable = False
                     print("Wait until element is clickable")
+            
+            # status
+            status_wait = WebDriverWait(self.driver, 100).until(EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, 'apx-combo-codificador select')))
+            status = Select(self.driver.find_element(
+                by=By.CSS_SELECTOR, value='apx-combo-codificador select'))
+            designed_option = WebDriverWait(self.driver, 20).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "apx-combo-codificador select option[value='01']")))
+            status.select_by_value('01') 
+
 
             address_location_component_wait = WebDriverWait(self.driver, 100).until(
                 EC.visibility_of_all_elements_located((By.TAG_NAME, 'address-location')))
@@ -93,9 +96,9 @@ class ComponentCreator:
             time.sleep(0.5)
             save_button = self.driver.find_element_by_xpath(
                 '//*[@id="frmsplicebox"]/form/footer/button[1]').click()
-        except:
-            self.driver = RemoteConnection.setup_connection()
-            print("Something went wrogn creating joint box, restart :(")
+
+            # self.driver = RemoteConnection.setup_connection()
+            # print("Something went wrogn creating joint box, restart :(")
 
     def create_pole_sb(self, pole_sb_template):
 
@@ -133,16 +136,7 @@ class ComponentCreator:
             save_button = self.driver.find_element_by_xpath(
                 '//*[@id="frmdistributionpoint"]/form/footer/button[1]').click()
 
-            # status
-            status_wait = WebDriverWait(self.driver, 100).until(
-                EC.element_to_be_clickable(
-                    (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
-            )
-            status = Select(self.driver.find_element(
-                by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
-            designed_option = WebDriverWait(self.driver, 20).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='01']")))
-            status.select_by_value('01')
+
 
             #details and address
             details_clickable = False
@@ -155,6 +149,17 @@ class ComponentCreator:
                     details_clickable = True
                 except:
                     print('not clickable yet')
+            
+            # status
+            status_wait = WebDriverWait(self.driver, 100).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
+            )
+            status = Select(self.driver.find_element(
+                by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
+            designed_option = WebDriverWait(self.driver, 20).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='01']")))
+            status.select_by_value('01')
 
             address_button = WebDriverWait(self.driver, 30).until(
                 EC.element_to_be_clickable(
@@ -231,17 +236,6 @@ class ComponentCreator:
             save_button = self.driver.find_element_by_xpath(
                 '//*[@id="frmdistributionpoint"]/form/footer/button[1]').click()
 
-            # status
-            status_wait = WebDriverWait(self.driver, 100).until(
-                EC.element_to_be_clickable(
-                    (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
-            )
-            status = Select(self.driver.find_element(
-                by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
-            designed_option = WebDriverWait(self.driver, 20).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='01']")))
-            status.select_by_value('01')
-
             #details and address
             details_clickable = False
             while details_clickable == False:
@@ -253,6 +247,17 @@ class ComponentCreator:
                     details_clickable = True
                 except:
                     print('not clickable yet')
+            
+            status_wait = WebDriverWait(self.driver, 100).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
+            )
+            status = Select(self.driver.find_element(
+                by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
+            designed_option = WebDriverWait(self.driver, 20).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='01']")))
+            status.select_by_value('01')
+
 
             address_button = WebDriverWait(self.driver, 30).until(
                 EC.element_to_be_clickable(

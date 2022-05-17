@@ -30,11 +30,11 @@ class CableManager:
     def get_cable_id(self, origin, destination):
 
         #cluster number is greater than 9
-        if self.working_cluster / 10 >= 1: 
-            return f'{self.woring_town_code}-CL0{self.working_cluster}-{origin}-{destination}'
+        # if self.working_cluster / 10 >= 1: 
+        #     return f'{self.woring_town_code}-CL0{self.working_cluster}-{origin}-{destination}'
         
         #return alternative id otherwise
-        return f'{self.woring_town_code}-CL00{self.working_cluster}-{origin}-{destination}'
+        return f'{self.woring_town_code}-EXT001-{origin}-{destination}'
         
 
     def automate_cable_form(self, cable_template): 

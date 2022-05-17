@@ -4,10 +4,10 @@ from component_creator import ComponentCreator
 from handle_input import handle_input
 from remote_connection import RemoteConnection
 
-WORKING_TOWN = Towns.BAMFORD
-WORKING_CLUSTER = 4  
+WORKING_TOWN = Towns.BRACKLEY
+WORKING_CLUSTER = 2 
 keep_open = False 
-WORKING_TOWN_CODE = 'BAM'
+WORKING_TOWN_CODE = 'BRK'
 
 if __name__ == '__main__': 
 
