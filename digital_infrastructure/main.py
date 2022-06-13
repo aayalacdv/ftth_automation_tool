@@ -5,7 +5,7 @@ from handle_input import handle_input
 from remote_connection import RemoteConnection
 
 WORKING_TOWN = Towns.LUTTERWORTH
-WORKING_CLUSTER = 2 
+WORKING_CLUSTER =  7
 keep_open = False 
 WORKING_TOWN_CODE = 'LUT'
 

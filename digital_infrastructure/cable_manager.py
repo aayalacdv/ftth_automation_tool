@@ -1,3 +1,4 @@
+from ast import Or
 from operator import not_
 from remote_connection import RemoteConnection
 from pydoc import Helper
@@ -40,30 +41,40 @@ class CableManager:
 
     def automate_cable_form(self, cable_template): 
 
-        try: 
+        # try: 
 
             self.driver.get('https://digitalinfra.apx-gis.net/#/newCable')
 
-            form_wait = WebDriverWait(self.driver, 600).until(EC.visibility_of_element_located((By.XPATH, ORIGIN_ID_XPATH )))
 
-            select_origin = Select(self.driver.find_element(by=By.XPATH, value=ORIGIN_ID_XPATH))
-            select_dest = Select(self.driver.find_element(by=By.XPATH, value = DEST_ID_XPATH))
+            form_wait = WebDriverWait(self.driver, 600).until(EC.visibility_of_element_located((By.XPATH, ORIGIN_ID_XPATH )))
+            WebDriverWait(self.driver, 30).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-find-closest-element select option")))
 
             origin = ''
+            origin_option = None
             destination = ''
+            destinantion_option = None
 
+            WebDriverWait(self.driver, 30).until(EC.presence_of_all_elements_located((By.XPATH, ORIGIN_ID_XPATH)))
+            select_origin = Select(self.driver.find_element(by=By.XPATH, value=ORIGIN_ID_XPATH))
 
             for i in range(1,len(select_origin.options)): 
                 selection = select_origin.options[i].text.split(':')
                 if len(selection) == 1: 
+                    origin_option = select_origin.options[i]
                     select_origin.select_by_index(i)
+                    WebDriverWait(self.driver, 30).until(EC.element_to_be_selected, origin_option)
                     origin = select_origin.options[i].text.split(' ')[0] 
                     break
+
+            WebDriverWait(self.driver, 30).until(EC.presence_of_all_elements_located((By.XPATH, DEST_ID_XPATH)))
+            select_dest = Select(self.driver.find_element(by=By.XPATH, value = DEST_ID_XPATH))
 
             for i in range(1,len(select_dest.options)): 
                 selection = select_dest.options[i].text.split(':')
                 if len(selection) == 1: 
+                    destionation_option = select_dest.options[i]
                     select_dest.select_by_index(i)
+                    WebDriverWait(self.driver, 30).until(EC.element_to_be_selected, destinantion_option)
                     destination = select_dest.options[i].text.split(' ')[0] 
                     break
 
@@ -106,18 +117,21 @@ class CableManager:
             tubes = int(int(cable_size)/ 10)
             print(tubes)
 
+            size_wait = WebDriverWait(self.driver, 30).until(EC.visibility_of_element_located((By.CSS_SELECTOR,"apx-field1[label='Tubes'] input")))
             tubes_input = self.driver.find_element(by=By.CSS_SELECTOR, value="apx-field1[label='Tubes'] input")
             tubes_input.send_keys(tubes) 
 
             if cable_template == CableCodes.CABLE_48_FO_ULW or cable_template == CableCodes.CABLE_12_FO_ULW: 
+
+                WebDriverWait(self.driver,30).until(EC.presence_of_element_located((By.CSS_SELECTOR,"apx-field1[label='Comentarios'] textarea")))
                 comments = self.driver.find_element(by=By.CSS_SELECTOR, value="apx-field1[label='Comentarios'] textarea")
                 comments.send_keys('AERIAL')
 
             save_button = self.driver.find_element_by_xpath('//*[@id="frmcable"]/form/footer/button[1]').click()
 
-        except: 
-            self.driver = RemoteConnection.setup_connection()
-            print('Eror creating cable')
+        # except: 
+        #     self.driver = RemoteConnection.setup_connection()
+        #     print('Eror creating cable')
 
 
 

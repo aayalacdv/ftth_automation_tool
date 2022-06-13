@@ -203,10 +203,12 @@ class ComponentCreator:
             print('Something went wrong creating pole sb :(')
 
     def create_joint_chamber_sb(self, sb_template):
-        try: 
+        # try: 
+            #print the box to the user
             print(f'creating {sb_template}')
             mouse_position = pyautogui.position()
 
+            #go to the url to avoid random shit 
             self.driver.get('https://digitalinfra.apx-gis.net/#/distributionpoints.add')
 
             # place the sb on the right position
@@ -215,45 +217,52 @@ class ComponentCreator:
             pyautogui.doubleClick(mouse_position)
 
             # select the correct template
+            #wait for the template to appear
             select_template_wait = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(
-                (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/select')))
-            select_template = Select(self.driver.find_element_by_xpath(
-                '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/select'))
+                (By.CSS_SELECTOR, "apx-field1[label='Template'] select")))
+            select_template = Select(self.driver.find_element(by=By.CSS_SELECTOR, value="apx-field1[label='Template'] select"))
+            
+            #wait for the template option to load
+            WebDriverWait(self.driver,300).until(EC.presence_of_element_located((By.CSS_SELECTOR, f"select option[value='{sb_template}']")))
+           #select the template 
             select_template.select_by_value(sb_template)
 
             # select the correct layer
             layer_wait = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(
-                (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/button')))
-            layer = self.driver.find_element_by_xpath(
-                '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/button').click()
+                (By.CSS_SELECTOR, "app-find-layer button")))
+            layer = self.driver.find_element(by=By.CSS_SELECTOR, value="app-find-layer button").click()
+
             overlay_panel_wait = WebDriverWait(self.driver, 10).until(
                 EC.visibility_of_element_located((By.CLASS_NAME, 'ui-overlaypanel')))
             upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(
-                (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[6]/li/div/span/span')))
+                (By.CSS_SELECTOR, 'p-overlaypanel p-tree')))
+
             helper.scrape_layers(
                 self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER)
 
-            save_button = self.driver.find_element_by_xpath(
-                '//*[@id="frmdistributionpoint"]/form/footer/button[1]').click()
+            #save the form 
+            WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "footer .btn-success")))
+            save_button = self.driver.find_element(by=By.CSS_SELECTOR, value="footer .btn-success").click()
 
             #details and address
             details_clickable = False
             while details_clickable == False:
                 try:
-                    details_wait = WebDriverWait(self.driver, 10).until(
-                        EC.element_to_be_clickable((By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/p-accordion/div/p-accordiontab[1]')))
+                    details_wait = WebDriverWait(self.driver, 100).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, "p-accordiontab[header='Details'] a")))
                     details = self.driver.find_element(
-                        by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/p-accordion/div/p-accordiontab[1]').click()
+                        by=By.CSS_SELECTOR, value="p-accordiontab[header='Details'] a").click()
                     details_clickable = True
                 except:
                     print('not clickable yet')
             
             status_wait = WebDriverWait(self.driver, 100).until(
                 EC.element_to_be_clickable(
-                    (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
+                    (By.CSS_SELECTOR, 'apx-field1 apx-combo-codificador select'))
             )
             status = Select(self.driver.find_element(
-                by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[3]/div/div/apx-combo-codificador/select'))
+                by=By.CSS_SELECTOR, value='apx-field1 apx-combo-codificador select'))
+
             designed_option = WebDriverWait(self.driver, 20).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='01']")))
             status.select_by_value('01')
@@ -261,18 +270,30 @@ class ComponentCreator:
 
             address_button = WebDriverWait(self.driver, 30).until(
                 EC.element_to_be_clickable(
-                    (By.XPATH, '//*[@id="distributionpoint_location"]/div/div/address-location/div/span/button'))
+                    (By.CSS_SELECTOR, 'address-location button'))
             )
             address_button = self.driver.find_element(
-                by=By.XPATH, value='//*[@id="distributionpoint_location"]/div/div/address-location/div/span/button').click()
+                by=By.CSS_SELECTOR, value='address-location button').click()
 
             # select chamber
             helper.select_chamber_or_parent(self.driver)
 
             # installation permit
+            WebDriverWait(self.driver, 30).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, '#uf_distributionpoint_Installationpermit select'))
+            )
             installation_permit = Select(self.driver.find_element(
-                by=By.XPATH, value='//*[@id="uf_distributionpoint_Installationpermit"]/select'))
-            installation_permit.select_by_index(2)
+                by=By.CSS_SELECTOR, value='#uf_distributionpoint_Installationpermit select'))
+
+            WebDriverWait(self.driver, 30).until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR,"option[value='Civil work required']"))
+            )
+
+            installation_permit.select_by_value('Civil work required')
+
+            WebDriverWait(self.driver, 30).until(
+                EC.element_to_be_selected(self.driver.find_element(by=By.CSS_SELECTOR, value="option[value='Civil work required']" ))
+            )
 
             # select clients
             clients_wait = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(
@@ -301,6 +322,6 @@ class ComponentCreator:
                 else:
                     uprn_selection = False
 
-        except: 
-            self.driver = RemoteConnection.setup_connection()
-            print('Something went wrong creating joint box sb')
+        # except: 
+        #     self.driver = RemoteConnection.setup_connection()
+        #     print('Something went wrong creating joint box sb')
