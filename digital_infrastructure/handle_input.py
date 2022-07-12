@@ -5,8 +5,7 @@ from helpers import Helpers
 
 
 
-def handle_input(creator, cable_manager): 
-    helper = Helpers()
+def handle_input(creator, cable_manager, helper : Helpers): 
      
     if helper.is_apx_active_window : 
         if keyboard.is_pressed('º+space'): 
@@ -56,6 +55,16 @@ def handle_input(creator, cable_manager):
 
         if keyboard.is_pressed('f+space') | keyboard.is_pressed('F+space'):
             cable_manager.automate_cable_form(cable_template=CableCodes.CABLE_48_FO_ULW)
+            print('Enter a command')
+
+        if keyboard.is_pressed('h+space') | keyboard.is_pressed('H+space'):
+            uprns = helper.scrape_uprns_from_map(cable_manager.driver)
+            helper.scrape_uprn_from_cto_list(cable_manager.driver, uprn_list=uprns)
+            print('Enter a command')
+
+
+        if keyboard.is_pressed('t+space') | keyboard.is_pressed('T+space'):
+            helper.delete_splitter(cable_manager.driver)
             print('Enter a command')
 
 def handle_uprn_response() -> bool: 

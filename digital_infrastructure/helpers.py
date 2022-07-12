@@ -1,5 +1,6 @@
 from asyncio.windows_events import NULL
 import time
+import selenium
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
@@ -15,6 +16,67 @@ class Helpers:
 
     def __init__(self) -> None:
         pass
+
+    def add_splitter(self, driver) -> None:
+
+        driver.find_element(
+            by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/p-accordion/div/p-accordiontab[4]/div[1]').click()
+        #cambiar el selector porque sino peta xdddd
+        spl_count = int(driver.find_element(
+            by=By.XPATH, value='//*[@id="ui-accordiontab-24"]/span[2]').text.split()[2][1])
+
+        WebDriverWait(driver, 30).until(EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, "app-networkclient-list .btn-success"))).click()
+
+        network_client_type = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "apx-field1[label='Networkclient type'] select")))
+        select = Select(network_client_type)
+
+        option = WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "option[value='splitter']")))
+        select.select_by_value('splitter')
+
+        WebDriverWait(driver, 30).until(EC.element_to_be_selected(option))
+
+        input = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "apx-field1[label='Código'] input")))
+        input.send_keys(f"SPL0{spl_count + 1}")
+
+        WebDriverWait(driver, 30).until(EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, "input[value='9']"))).find_element(by=By.XPATH, value='..').click()
+
+        select_operador = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "apx-field1[label='Operador'] select")))
+        select = Select(select_operador)
+
+        digital_operador = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "option[value='xxxx-a2f9-6b2778fb-9be64d23-0646477c']")))
+        select.select_by_value('xxxx-a2f9-6b2778fb-9be64d23-0646477c')
+        WebDriverWait(driver, 30).until(
+            EC.element_to_be_selected(digital_operador))
+
+        WebDriverWait(driver, 30).until(EC.element_to_be_clickable(
+            (By.XPATH, '//*[@id="ui-accordiontab-24-content"]/div/app-networkclient-list/app-networkclient/apx-form1/form/footer/button[1]'))).click()
+
+    def delete_splitter(self, driver) -> None:
+        driver.find_element(
+            by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/p-accordion/div/p-accordiontab[4]/div[1]').click()
+        spl_count = int(driver.find_element(
+            by=By.XPATH, value='//*[@id="ui-accordiontab-24"]/span[2]').text.split()[2][1])
+
+        WebDriverWait(driver,30).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR,"app-networkclient-list table td")))
+        spls = driver.find_elements(
+            by=By.CSS_SELECTOR, value="app-networkclient-list table td")
+
+        for element in spls:
+            print(element.text)
+            if len(element.text) == 5:
+                if element.text[4] == str(spl_count):
+                    element.click()
+                    WebDriverWait(driver, 30).until(EC.element_to_be_clickable(
+                        (By.CSS_SELECTOR, 'footer button .btn-danger'))).click()
+                    WebDriverWait(driver, 30).until(EC.element_to_be_clickable(
+                        (By.XPATH, '//*[@id="btConfirmSi"]'))).click()
 
     def select_chamber_or_parent(self, driver):
         find_closest_element = driver.find_element(
@@ -62,47 +124,44 @@ class Helpers:
         except:
             print('Error locationg Element')
 
-    def scrape_layers(self, driver, working_town, working_cluster):
+    def get_treenode_identifier(self, working_cluster, working_cluster_code) -> str:
+        if working_cluster < 10:
+            return f"{working_cluster_code}-CLUSTER 0{working_cluster}"
+
+        return f"{working_cluster_code}-CLUSTER {working_cluster}"
+
+    def scrape_layers(self, driver, working_town, working_cluster, working_cluster_code):
 
         # get nodes with layer info
-        overlay_panel = driver.find_element(
-            by=By.CLASS_NAME, value='ui-overlaypanel')
-        tree_nodes = overlay_panel.find_elements(
-            by=By.CLASS_NAME, value='ui-treenode-content')
+        parent = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, f".ui-treenode-content[aria-label='{working_town}']"))).find_element(by=By.XPATH, value='..')
+        WebDriverWait(driver, 30).until(EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, f".ui-treenode-content[aria-label='{working_town}'] .ui-tree-toggler"))).click()
 
-        # extract layer info
-        for node in tree_nodes:
+        aria_label = self.get_treenode_identifier(
+            working_cluster=working_cluster, working_cluster_code=working_cluster_code)
+        WebDriverWait(driver, 60).until(EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, f".ui-treenode-selectable[aria-label='{aria_label}'] .ui-chkbox-box"))).click()
 
-            span = node.find_element(
-                by=By.CLASS_NAME, value='ui-treenode-label')
-            if(span.text == working_town):
-                node.find_element(by=By.CLASS_NAME,
-                                  value='ui-tree-toggler').click()
+    def testing(self, driver) -> list:
+        res = []
 
-                # wait for the cluster list to be visible
-                node_children_wait = WebDriverWait(driver, 100).until(
-                    EC.visibility_of_element_located((By.CLASS_NAME, 'ui-treenode-children')))
-                node_children = driver.find_element(
-                    by=By.CLASS_NAME, value='ui-treenode-children')
+        uprns = driver.find_elements(
+            by=By.CSS_SELECTOR, value="a[href^='#uprn']")
 
-                # get the node content to find the cluster
-                node_content = node_children.find_elements(
-                    by=By.CLASS_NAME, value='ui-treenode-content')
+        parent = uprns[0].find_element(by=By.XPATH, value='./ancestor::div[3]')
+        span = parent.find_element(by=By.CSS_SELECTOR, value=".type_count")
 
-                for content in node_content:
-                    span_label = content.find_element(
-                        by=By.CLASS_NAME, value='ui-treenode-label')
-                    label = span_label.find_element(
-                        by=By.TAG_NAME, value='span')
-                    cluster = label.text.split()
+        # if the child coutn matches it means all of the houeses loaded correctly
 
-                    try:
-                        if(int(cluster[1]) == working_cluster):
-                            cluster_checkbox = content.find_element(
-                                by=By.CLASS_NAME, value='ui-chkbox-box').click()
-                            return
-                    except:
-                        pass
+        child_count = driver.execute_script(
+            'return document.querySelector(".ng-star-inserted div").childElementCount')
+        print(f" element count: {child_count}")
+
+        res = [uprn.text for uprn in uprns]
+
+        print(res)
+        return res
 
     def scrape_uprns_from_map(self, driver):
 
@@ -114,23 +173,21 @@ class Helpers:
 
         real_positions = get_real_positions(region_position, house_positions)
         # create a list of uprns
-        uprns = []
 
+        uprns = []
         for pos in real_positions:
             try:
                 pyautogui.click(pos)
                 time.sleep(0.5)
 
                 # wait until popup visible
-                popup_wait = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
-                    (By.CLASS_NAME, 'leaflet-popup-content-wrapper')))
+                uprn_elements = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(
+                    (By.CSS_SELECTOR, "a[href^='#uprn']")))
 
                 # get uprn code and adress
-                popup = driver.find_element(
-                    by=By.CLASS_NAME, value='leaflet-popup-content-wrapper')
-                a = popup.find_element(by=By.TAG_NAME, value='a')
+                res = [uprn.text for uprn in uprn_elements if uprn.text != '']
 
-                uprns.append(a.text)
+                uprns = uprns + res
 
             except:
                 pass

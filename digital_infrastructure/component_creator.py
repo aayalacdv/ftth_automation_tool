@@ -16,11 +16,12 @@ helper = Helpers()
 
 class ComponentCreator:
 
-    def __init__(self, driver: webdriver.Chrome, working_town, working_cluster):
+    def __init__(self, driver: webdriver.Chrome, working_town, working_cluster, working_town_code):
 
         self.driver = driver
         self.WORKING_CLUSTER = working_cluster
         self.WORKING_TOWN = working_town
+        self.WORKING_TOWN_CODE = working_town_code
 
     def create_joint_box(self, joint_box_code):
             print(f"Creating {joint_box_code}")
@@ -51,7 +52,7 @@ class ComponentCreator:
             upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(
                 (By.XPATH, '//*[@id="frmsplicebox"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[6]/li/div/span/span')))
             helper.scrape_layers(
-                self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER)
+                self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER, working_cluster_code=self.WORKING_TOWN_CODE)
             
 
 
@@ -131,7 +132,7 @@ class ComponentCreator:
             upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(
                 (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/apx-field1[4]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[6]/li/div/span/span')))
             helper.scrape_layers(
-                self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER)
+                self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER, working_cluster_code=self.WORKING_TOWN_CODE)
 
             save_button = self.driver.find_element_by_xpath(
                 '//*[@id="frmdistributionpoint"]/form/footer/button[1]').click()
@@ -238,7 +239,7 @@ class ComponentCreator:
                 (By.CSS_SELECTOR, 'p-overlaypanel p-tree')))
 
             helper.scrape_layers(
-                self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER)
+                self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER, working_cluster_code=self.WORKING_TOWN_CODE)
 
             #save the form 
             WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "footer .btn-success")))
