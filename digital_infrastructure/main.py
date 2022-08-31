@@ -6,10 +6,10 @@ from selenium.webdriver.common.by import By
 from helpers import Helpers
 from remote_connection import RemoteConnection
 
-WORKING_TOWN = Towns.THURNSCOE
-WORKING_CLUSTER = 5 
+WORKING_TOWN = Towns.CORBY
+WORKING_CLUSTER = 22
 keep_open = False 
-WORKING_TOWN_CODE = 'THU'
+WORKING_TOWN_CODE = 'COR'
 
 if __name__ == '__main__': 
 

@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 import pyautogui
 from image_recognition.position_manager import get_house_positions, get_real_positions, get_region_position
 import win32gui
+from selenium.webdriver import Keys, ActionChains
 
 from image_recognition.screenshot_manager import get_region
 
@@ -135,8 +136,9 @@ class Helpers:
         # get nodes with layer info
         parent = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, f".ui-treenode-content[aria-label='{working_town}']"))).find_element(by=By.XPATH, value='..')
-        WebDriverWait(driver, 30).until(EC.element_to_be_clickable(
-            (By.CSS_SELECTOR, f".ui-treenode-content[aria-label='{working_town}'] .ui-tree-toggler"))).click()
+        WebDriverWait(driver, 30).until(EC.visibility_of_element_located((By.CSS_SELECTOR, f".ui-treenode-content[aria-label='{working_town}'] .ui-tree-toggler")))
+        driver.execute_script(f'''document.querySelectorAll(".ui-treenode-content[aria-label='{working_town}'] .ui-tree-toggler")[0].click()''')
+    
 
         aria_label = self.get_treenode_identifier(
             working_cluster=working_cluster, working_cluster_code=working_cluster_code)

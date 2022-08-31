@@ -47,7 +47,7 @@ class CableManager:
 
     def automate_cable_form(self, cable_template): 
 
-        # try: 
+        try: 
 
             self.driver.get('https://digitalinfra.apx-gis.net/#/newCable')
 
@@ -131,15 +131,15 @@ class CableManager:
 
             if cable_template == CableCodes.CABLE_48_FO_ULW or cable_template == CableCodes.CABLE_12_FO_ULW: 
 
-                WebDriverWait(self.driver,30).until(EC.presence_of_element_located((By.CSS_SELECTOR,"apx-field1[label='Comentarios'] textarea")))
-                comments = self.driver.find_element(by=By.CSS_SELECTOR, value="apx-field1[label='Comentarios'] textarea")
+                WebDriverWait(self.driver,30).until(EC.presence_of_element_located((By.CSS_SELECTOR,"apx-field1[label='Comments'] textarea")))
+                comments = self.driver.find_element(by=By.CSS_SELECTOR, value="apx-field1[label='Comments'] textarea")
                 comments.send_keys('AERIAL')
 
             save_button = self.driver.find_element_by_xpath('//*[@id="frmcable"]/form/footer/button[1]').click()
 
-        # except: 
-        #     self.driver = RemoteConnection.setup_connection()
-        #     print('Eror creating cable')
+        except: 
+            self.driver = RemoteConnection.setup_connection()
+            print('Eror creating cable')
 
 
 

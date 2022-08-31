@@ -16,6 +16,7 @@ class Towns:
     CARNFORTH = 'CARNFORTH'
     ASAPH = "ST. ASAPH-RHUDDLAN-DYSERTH"
     THURNSCOE = "THURNSCOE"
+    CORBY = 'CORBY'
 
 class SbCodes: 
 
