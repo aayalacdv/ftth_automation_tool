@@ -10,6 +10,7 @@ class Towns:
     CRAWLEY = 'CRAWLEY'
     CARTERTON = 'CARTERTON'
     DORKING = "DORKING"
+    BURGESS_HILL = "BURGESS HILL"
 
 
 class SbCodes: 
