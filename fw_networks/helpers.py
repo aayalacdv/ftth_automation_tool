@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 import pyautogui
+import win32gui
 from image_recognition.position_manager import get_house_positions, get_real_positions, get_region_position
 
 from image_recognition.screenshot_manager import get_region
@@ -109,7 +110,7 @@ class Helpers:
 
         return f"{working_cluster_code}-CLUSTER {working_cluster}"
 
-    def scrape_layers(self, driver, working_town, working_cluster, working_cluster_code='BUR'):
+    def scrape_layers(self, driver, working_town, working_cluster, working_cluster_code):
         # get nodes with layer info
         parent = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, f".ui-treenode-content[aria-label='{working_town}']"))).find_element(by=By.XPATH, value='..')
@@ -177,3 +178,13 @@ class Helpers:
                     tr.click()
             except:
                 pass
+
+    def is_apx_active_window(self) -> bool:
+
+        window = win32gui.GetForegroundWindow()
+        active_window_name = win32gui.GetWindowText(window)
+
+        if active_window_name == 'APX - Digital Infrastructure - Google Chrome':
+            return True
+
+        return False
