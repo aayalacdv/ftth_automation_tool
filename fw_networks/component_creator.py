@@ -278,6 +278,19 @@ class ComponentCreator:
             status = Select(status_web_element)
             status.select_by_value('01')
 
+            # put description field and type
+            description_field = self.driver.find_element(
+                by=By.CSS_SELECTOR, value='apx-field1[label="Description"] input')
+            description_field.clear()
+            description_field.send_keys(sb_template)
+
+            select_type = Select(self.driver.find_element(
+                by=By.CSS_SELECTOR, value='apx-field1[label="Type"] select'))
+            if sb_template == SbCodes.JOINT_CHAMBER_SB_MOS:
+                select_type.select_by_value('JOINT CHAMBER SB 12 MOS')
+            elif sb_template == SbCodes.JOINT_CHAMBER_SB_SAT:
+                select_type.select_by_value('JOINT CHAMBER SB 12 SAT')
+
             # installation permit
             WebDriverWait(self.driver, 30).until(
                 EC.visibility_of_element_located(

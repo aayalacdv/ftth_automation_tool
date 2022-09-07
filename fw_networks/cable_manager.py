@@ -94,7 +94,7 @@ class CableManager:
             EC.visibility_of_element_located((By.CLASS_NAME, 'ui-overlaypanel')))
         #upr_option_wait = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="frmcable"]/form/article/div[2]/apx-field1[5]/div/div/app-find-layer/p-overlaypanel/div/div/p-tree/div/div/ul/p-treenode[4]/li/div/div/div/span')))
         helper.scrape_layers(
-            self.driver, self.workign_town, self.working_cluster)
+            self.driver, self.workign_town, self.working_cluster, self.woring_town_code)
 
         save_button = self.driver.find_element_by_xpath(
             '//*[@id="frmcable"]/form/footer/button[1]').click()
