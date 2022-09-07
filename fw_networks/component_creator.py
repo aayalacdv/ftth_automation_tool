@@ -10,20 +10,20 @@ from constants import SbCodes
 from custom_wait_conditions import element_text_not_null
 from handle_input import handle_uprn_response
 
-from helpers import Helpers
 from remote_connection import RemoteConnection
 
-helper = Helpers()
 
 
 class ComponentCreator:
 
-    def __init__(self, driver: webdriver.Chrome, working_town, working_cluster, working_town_code):
+    def __init__(self, driver: webdriver.Chrome, working_town, working_cluster, working_town_code, helper):
 
         self.driver = driver
         self.WORKING_CLUSTER = working_cluster
         self.WORKING_TOWN = working_town
         self.WORKING_TOWN_CODE = working_town_code
+        self.helper = helper
+
 
     def create_joint_box(self, joint_box_code):
 
@@ -53,7 +53,7 @@ class ComponentCreator:
             (By.CSS_SELECTOR, "apx-field1[label='Layer'] app-find-layer button"))).click()
         overlay_panel_wait = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.CLASS_NAME, 'ui-overlaypanel')))
-        helper.scrape_layers(
+        self.helper.scrape_layers(
             self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER, working_cluster_code=self.WORKING_TOWN_CODE)
 
         save_button = WebDriverWait(self.driver, 100).until(
@@ -86,7 +86,7 @@ class ComponentCreator:
         WebDriverWait(self.driver, 30).until(
             element_text_not_null(location_input))
 
-        helper.select_chamber_or_parent(self.driver)
+        self.helper.select_chamber_or_parent(self.driver)
 
         # status
         # wait firts for the option, the select it
@@ -138,7 +138,7 @@ class ComponentCreator:
                 (By.CSS_SELECTOR, "apx-field1[label='Layer'] app-find-layer button"))).click()
             overlay_panel_wait = WebDriverWait(self.driver, 10).until(
                 EC.visibility_of_element_located((By.CLASS_NAME, 'ui-overlaypanel')))
-            helper.scrape_layers(
+            self.helper.scrape_layers(
                 self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER, working_cluster_code=self.WORKING_TOWN_CODE)
 
             save_button = self.driver.find_element(
@@ -169,7 +169,8 @@ class ComponentCreator:
                 element_text_not_null(location_input))
 
             # select chamber
-            helper.select_chamber_or_parent(self.driver)
+            self.helper.select_chamber_or_parent(self.driver)
+
 
             designed_option = WebDriverWait(self.driver, 100).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "apx-combo-codificador select option[value='01']")))
@@ -198,8 +199,8 @@ class ComponentCreator:
 
                 select_clients = handle_uprn_response()
                 if select_clients:
-                    uprn_list = helper.scrape_uprns_from_map(self.driver)
-                    helper.scrape_uprn_from_cto_list(
+                    uprn_list = self.helper.scrape_uprns_from_map(self.driver)
+                    self.helper.scrape_uprn_from_cto_list(
                         self.driver, uprn_list=uprn_list)
 
                 else:
@@ -240,7 +241,7 @@ class ComponentCreator:
                 (By.CSS_SELECTOR, "apx-field1[label='Layer'] app-find-layer button"))).click()
             overlay_panel_wait = WebDriverWait(self.driver, 10).until(
                 EC.visibility_of_element_located((By.CLASS_NAME, 'ui-overlaypanel')))
-            helper.scrape_layers(
+            self.helper.scrape_layers(
                 self.driver, self.WORKING_TOWN, self.WORKING_CLUSTER, working_cluster_code=self.WORKING_TOWN_CODE)
 
             save_button = self.driver.find_element(
@@ -269,7 +270,7 @@ class ComponentCreator:
                 element_text_not_null(location_input))
 
             # select chamber
-            helper.select_chamber_or_parent(self.driver)
+            self.helper.select_chamber_or_parent(self.driver)
 
             designed_option = WebDriverWait(self.driver, 100).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "apx-combo-codificador select option[value='01']")))
@@ -331,8 +332,8 @@ class ComponentCreator:
 
                 select_clients = handle_uprn_response()
                 if select_clients:
-                    uprn_list = helper.scrape_uprns_from_map(self.driver)
-                    helper.scrape_uprn_from_cto_list(
+                    uprn_list = self.helper.scrape_uprns_from_map(self.driver)
+                    self.helper.scrape_uprn_from_cto_list(
                         self.driver, uprn_list=uprn_list)
 
                 else:

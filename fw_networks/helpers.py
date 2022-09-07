@@ -13,8 +13,10 @@ from image_recognition.screenshot_manager import get_region
 
 class Helpers:
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, is_ext=False, num_ext=1) -> None:
+        self.is_ext = is_ext
+        self.num_ext = num_ext
+
 
     def select_chamber_or_parent(self, driver):
         find_closest_element = driver.find_element(
@@ -62,53 +64,15 @@ class Helpers:
         except:
             print('Error locationg Element')
 
-    def scrape_layers_ext(self, driver, working_town, working_cluster):
-
-        # get nodes with layer info
-        overlay_panel = driver.find_element(
-            by=By.CLASS_NAME, value='ui-overlaypanel')
-        tree_nodes = overlay_panel.find_elements(
-            by=By.CLASS_NAME, value='ui-treenode-content')
-
-        # extract layer info
-        for node in tree_nodes:
-
-            span = node.find_element(
-                by=By.CLASS_NAME, value='ui-treenode-label')
-            if(span.text == working_town):
-                node.find_element(by=By.CLASS_NAME,
-                                  value='ui-tree-toggler').click()
-
-                # wait for the cluster list to be visible
-                node_children_wait = WebDriverWait(driver, 100).until(
-                    EC.visibility_of_element_located((By.CLASS_NAME, 'ui-treenode-children')))
-                node_children = driver.find_element(
-                    by=By.CLASS_NAME, value='ui-treenode-children')
-
-                # get the node content to find the cluster
-                node_content = node_children.find_elements(
-                    by=By.CLASS_NAME, value='ui-treenode-content')
-
-                for content in node_content:
-                    span_label = content.find_element(
-                        by=By.CLASS_NAME, value='ui-treenode-label')
-                    label = span_label.find_element(
-                        by=By.TAG_NAME, value='span')
-                    cluster = label.text.split('-')
-
-                    try:
-                        if(int(cluster[1].split()[1]) == 1 & cluster[1].split()[0] == 'EXT'):
-                            cluster_checkbox = content.find_element(
-                                by=By.CLASS_NAME, value='ui-chkbox-box').click()
-                            return
-                    except:
-                        pass
-
     def get_treenode_identifier(self, working_cluster, working_cluster_code) -> str:
+        if self.is_ext: 
+            return f"{working_cluster_code}-EXT 0{self.num_ext}"
+
         if working_cluster < 10:
             return f"{working_cluster_code}-CLUSTER 0{working_cluster}"
 
         return f"{working_cluster_code}-CLUSTER {working_cluster}"
+
 
     def scrape_layers(self, driver, working_town, working_cluster, working_cluster_code):
         # get nodes with layer info

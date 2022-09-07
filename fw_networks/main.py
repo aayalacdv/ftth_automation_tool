@@ -11,15 +11,20 @@ WORKING_CLUSTER = 13
 keep_open = False
 WORKING_TOWN_CODE = 'BUR'
 
+#extention nigga ;)
+NUM_EXT = 1
+IS_EXT = True
+
 if __name__ == '__main__':
 
     try:
+        helper = Helpers(is_ext=IS_EXT, num_ext=NUM_EXT)
         driver = RemoteConnection.setup_connection()
         creator = ComponentCreator(driver=driver, working_town=WORKING_TOWN,
-                                   working_cluster=WORKING_CLUSTER, working_town_code=WORKING_TOWN_CODE)
+                                   working_cluster=WORKING_CLUSTER, working_town_code=WORKING_TOWN_CODE, helper=helper)
         cable_manager = CableManager(driver=driver, working_cluster=WORKING_CLUSTER,
-                                     working_town_code=WORKING_TOWN_CODE, working_town=WORKING_TOWN)
-        helper = Helpers()
+                                     working_town_code=WORKING_TOWN_CODE, working_town=WORKING_TOWN, is_ext=IS_EXT, num_ext=NUM_EXT, helper=helper)
+        
 
         keep_open = True
 
