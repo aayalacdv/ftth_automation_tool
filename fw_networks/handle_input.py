@@ -52,12 +52,7 @@ def handle_input(creator, cable_manager, helper: Helpers):
 
         if keyboard.is_pressed('d+space') | keyboard.is_pressed('D+space'):
             cable_manager.automate_cable_form(
-                cable_template=CableCodes.CABLE_12_FO_ULW)
-            print('Enter a command')
-
-        if keyboard.is_pressed('f+space') | keyboard.is_pressed('F+space'):
-            cable_manager.automate_cable_form(
-                cable_template=CableCodes.CABLE_48_FO_ULW)
+                cable_template=CableCodes.CABLE_36_FO)
             print('Enter a command')
 
         if keyboard.is_pressed('h+space') | keyboard.is_pressed('H+space'):
