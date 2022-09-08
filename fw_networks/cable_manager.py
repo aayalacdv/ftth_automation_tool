@@ -29,7 +29,7 @@ class CableManager:
     def get_cable_id(self, origin, destination):
 
         if self.is_ext:
-            return f'{self.woring_town_code}-EXT001-{origin}-{destination}'
+            return f'{self.woring_town_code}-EXT00{self.num_ext}-{origin}-{destination}'
 
         if self.working_cluster / 10 >= 1:
             return f'{self.woring_town_code}-CL0{self.working_cluster}-{origin}-{destination}'

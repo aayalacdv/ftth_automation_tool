@@ -7,13 +7,13 @@ from remote_connection import RemoteConnection
 from helpers import Helpers
 
 WORKING_TOWN = Towns.BURGESS_HILL
-WORKING_CLUSTER = 13
+WORKING_CLUSTER = 2
 keep_open = False
 WORKING_TOWN_CODE = 'BUR'
 
 #extention nigga ;)
-NUM_EXT = 1
-IS_EXT = True
+NUM_EXT = 2
+IS_EXT = False
 
 if __name__ == '__main__':
 
