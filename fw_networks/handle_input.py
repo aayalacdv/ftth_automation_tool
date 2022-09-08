@@ -15,6 +15,11 @@ def handle_input(creator, cable_manager, helper: Helpers):
             creator.create_joint_box(JointBoxCodes.JOINT_BOX_MEDIAN)
             print('Enter a command')
 
+        if keyboard.is_pressed('<+space'):
+            creator.create_joint_box(JointBoxCodes.JOINT_BOX_SAM)
+            print('Enter a command')
+
+
         if keyboard.is_pressed('q+space') | keyboard.is_pressed('Q+space'):
             creator.create_joint_chamber_sb(
                 SbCodes.JOINT_CHAMBER_SB_12_CLIENTS)

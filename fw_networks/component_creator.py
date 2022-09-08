@@ -13,7 +13,6 @@ from handle_input import handle_uprn_response
 from remote_connection import RemoteConnection
 
 
-
 class ComponentCreator:
 
     def __init__(self, driver: webdriver.Chrome, working_town, working_cluster, working_town_code, helper):
@@ -23,7 +22,6 @@ class ComponentCreator:
         self.WORKING_TOWN = working_town
         self.WORKING_TOWN_CODE = working_town_code
         self.helper = helper
-
 
     def create_joint_box(self, joint_box_code):
 
@@ -125,12 +123,22 @@ class ComponentCreator:
             pyautogui.doubleClick(mouse_position)
 
             # select the correct template
-            select_option = WebDriverWait(self.driver, 100).until(EC.presence_of_element_located(
-                (By.CSS_SELECTOR, f"apx-field1[label='Template'] select option[value='{pole_sb_template}']")))
+            selected_value = ''
+            if pole_sb_template == SbCodes.POLE_SB_24_CLIENTS_MOS or pole_sb_template == SbCodes.POLE_SB_24_CLIENTS_SAT:
+                print('...creating new poles')
+                select_option = WebDriverWait(self.driver, 100).until(EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, f"apx-field1[label='Template'] select option[value='POLE SB 24 CLIENTS 1 SPL']")))
+                selected_value = 'POLE SB 24 CLIENTS 1 SPL'
+            else:
+                print('...normal operation')
+                select_option = WebDriverWait(self.driver, 100).until(EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, f"apx-field1[label='Template'] select option[value='{pole_sb_template}']")))
+                selected_value = pole_sb_template
+
             select_component = WebDriverWait(self.driver, 100).until(EC.presence_of_element_located(
                 (By.CSS_SELECTOR, "apx-field1[label='Template'] select")))
             select_template = Select(select_component)
-            select_template.select_by_value(pole_sb_template)
+            select_template.select_by_value(selected_value)
             WebDriverWait(self.driver, 100).until(
                 EC.element_to_be_selected(select_option))
 
@@ -171,7 +179,6 @@ class ComponentCreator:
             # select chamber
             self.helper.select_chamber_or_parent(self.driver)
 
-
             designed_option = WebDriverWait(self.driver, 100).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "apx-combo-codificador select option[value='01']")))
             status_web_element = WebDriverWait(self.driver, 100).until(EC.presence_of_element_located(
@@ -179,13 +186,36 @@ class ComponentCreator:
             status = Select(status_web_element)
             status.select_by_value('01')
 
-            # select clients
-            clients_wait = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(
-                (By.XPATH, '//*[@id="frmdistributionpoint"]/form/article/div[2]/p-accordion/div/p-accordiontab[2]')))
-            clients = self.driver.find_element(
-                by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/p-accordion/div/p-accordiontab[2]').click()
+            #description field
+            description_field = self.driver.find_element(
+                by=By.CSS_SELECTOR, value='apx-field1[label="Description"] input')
+            description_field.clear()
+            description_field.send_keys(pole_sb_template)
 
-            # select add button
+            #select type
+            select_type = Select(self.driver.find_element(
+                by=By.CSS_SELECTOR, value='apx-field1[label="Type"] select'))
+            select_type.select_by_value(pole_sb_template)
+ 
+
+            #remove spl when creatig SAT
+            if pole_sb_template == SbCodes.POLE_SB_24_CLIENTS_SAT:
+                documents_option = self.driver.find_element(by=By.CSS_SELECTOR, value="p-accordion div[role='tablist'] p-accordiontab[header='Clients']").find_element(by=By.XPATH, value='..')
+                for opt in documents_option.find_elements(by=By.TAG_NAME, value='p-accordiontab'): 
+                    if opt.text.split()[0] == 'Network': 
+                        opt.click()
+                        WebDriverWait(self.driver, 100).until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'table td'))).click()
+                        WebDriverWait(self.driver, 100).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.btn-danger'))).click()
+                        WebDriverWait(self.driver, 100).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '#btConfirmSi'))).click()
+
+            
+            # select clients
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, 'p-accordiontab[header="Clients"]')))
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, 'p-accordiontab[header="Clients"] span'))).click()
+        
+            #select add button
             clients = self.driver.find_element(
                 by=By.XPATH, value='//*[@id="frmdistributionpoint"]/form/article/div[2]/p-accordion/div/p-accordiontab[2]')
             add_button_wait = WebDriverWait(self.driver, 10).until(
@@ -193,7 +223,7 @@ class ComponentCreator:
             add_button = clients.find_element(
                 by=By.TAG_NAME, value='button').click()
 
-            # uprn selection loop
+            # # uprn selection loop
             uprn_selection = True
             while uprn_selection:
 
