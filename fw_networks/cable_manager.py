@@ -21,7 +21,7 @@ class CableManager:
         self.driver = driver
         self.working_cluster = working_cluster
         self.woring_town_code = working_town_code
-        self.workign_town = working_town
+        self.workign_town = working_towns
         self.is_ext = is_ext
         self.num_ext = num_ext
         self.helper = helper
